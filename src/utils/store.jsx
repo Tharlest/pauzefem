@@ -30,6 +30,7 @@ export function StoreProvider({ children }) {
   const [currentDay, setCurrentDay] = usePersistentState('currentDay', 1)
   const [activeDays, setActiveDays] = usePersistentState('activeDays', [])
   const [checkin, setCheckin] = usePersistentState('checkin', null) // { date, selected: [] }
+  const [thermo, setThermo] = usePersistentState('thermo', []) // [{ date, id, score }]
   const [soundOn, setSoundOn] = usePersistentState('soundOn', false)
 
   const setAnswer = useCallback(
@@ -90,6 +91,24 @@ export function StoreProvider({ children }) {
     [setCheckin, markActiveToday],
   )
 
+  // Termômetro corporal: registra/atualiza a leitura de hoje e guarda histórico.
+  const submitThermo = useCallback(
+    (option) => {
+      const t = todayKey()
+      setThermo((prev) => {
+        const withoutToday = prev.filter((e) => e.date !== t)
+        return [...withoutToday, { date: t, id: option.id, score: option.score }]
+      })
+      markActiveToday()
+    },
+    [setThermo, markActiveToday],
+  )
+
+  const todayThermo = useMemo(
+    () => thermo.find((e) => e.date === todayKey()) || null,
+    [thermo],
+  )
+
   const resetAll = useCallback(() => {
     clearAll()
     setQuizAnswers({})
@@ -98,9 +117,15 @@ export function StoreProvider({ children }) {
     setCurrentDay(1)
     setActiveDays([])
     setCheckin(null)
-  }, [setQuizAnswers, setScores, setProgress, setCurrentDay, setActiveDays, setCheckin])
+    setThermo([])
+  }, [setQuizAnswers, setScores, setProgress, setCurrentDay, setActiveDays, setCheckin, setThermo])
 
   const streak = useMemo(() => computeStreak(activeDays), [activeDays])
+  // Streak gentil: indica se a pessoa fez uma pausa (não punitivo).
+  const tookBreak = useMemo(
+    () => streak === 0 && activeDays.length > 0,
+    [streak, activeDays],
+  )
 
   const totalPoints = useMemo(
     () => DAYS.reduce((sum, d) => sum + dayPoints(d.day), 0),
@@ -121,10 +146,14 @@ export function StoreProvider({ children }) {
     currentDay,
     setCurrentDay,
     streak,
+    tookBreak,
     totalPoints,
     todayPoints,
     checkin,
     submitCheckin,
+    thermo,
+    todayThermo,
+    submitThermo,
     soundOn,
     setSoundOn,
     resetAll,
