@@ -40,3 +40,12 @@ export const ENCOURAGEMENTS = [
   'Seu corpo agradece',
   'Pequenos passos contam',
 ]
+
+// Termômetro corporal — como o corpo está "falando" hoje.
+// score: usado para desenhar a evolução (quanto maior, melhor).
+export const BODY_THERMO = [
+  { id: 'pesada', label: 'Muito pesada', icon: '🔴', hex: '#FF5C6C', score: 1 },
+  { id: 'inchada', label: 'Inchada', icon: '🟠', hex: '#FF9F45', score: 2 },
+  { id: 'maisoumenos', label: 'Mais ou menos', icon: '🟡', hex: '#FFC857', score: 3 },
+  { id: 'melhorando', label: 'Melhorando', icon: '🟢', hex: '#39FF8B', score: 4 },
+]

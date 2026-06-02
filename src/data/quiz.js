@@ -1,4 +1,4 @@
-// PAUZE Quiz™ — 15 perguntas.
+// PAUZE Quiz™ — 15 perguntas (mineração emocional).
 // Respostas padrão: Nunca=0, Às vezes=1, Frequentemente=2, Quase sempre=3
 // Perguntas "positivas" (positive: true) têm pontuação invertida:
 // Nunca=3, Às vezes=2, Frequentemente=1, Quase sempre=0
@@ -9,21 +9,41 @@ export const ANSWER_LABELS = ['Nunca', 'Às vezes', 'Frequentemente', 'Quase sem
 export const MAX_PER_QUESTION = 3
 
 export const QUESTIONS = [
-  { id: 1, text: 'Você acorda inchada?' },
-  { id: 2, text: 'Sua barriga parece estufada?' },
-  { id: 3, text: 'Sente retenção antes da menstruação?' },
-  { id: 4, text: 'Suas pernas ficam pesadas?' },
-  { id: 5, text: 'Anda cansada mesmo dormindo?' },
-  { id: 6, text: 'Sua energia caiu após os 40?' },
-  { id: 7, text: 'Se sente "travada"?' },
-  { id: 8, text: 'Dorme mal?' },
-  { id: 9, text: 'Acorda cansada?' },
-  { id: 10, text: 'Sua mente acelera à noite?' },
-  { id: 11, text: 'Intestino preso?' },
-  { id: 12, text: 'Barriga estufa facilmente?' },
-  { id: 13, text: 'Caminha ao menos 20 minutos?', positive: true },
-  { id: 14, text: 'Consome ultraprocessados?' },
-  { id: 15, text: 'Consome fibras?', positive: true },
+  {
+    id: 1,
+    text: 'Você acorda sentindo seu corpo mais inchado do que gostaria?',
+    empathy: 'Muitas mulheres relatam isso após os 40 💚',
+  },
+  { id: 2, text: 'Sua barriga parece maior "do nada", mesmo sem exagerar?' },
+  {
+    id: 3,
+    text: 'Você sente que seu corpo mudou… e não te avisou?',
+    empathy: 'Você não está sozinha nisso.',
+  },
+  { id: 4, text: 'Você sente que tenta se cuidar, mas seu corpo parece não responder?' },
+  {
+    id: 5,
+    text: 'Você acorda cansada mesmo depois de dormir?',
+    empathy: 'Isso é mais comum do que parece — e tem a ver com o ritmo do corpo.',
+  },
+  { id: 6, text: 'Seu sono parece não descansar como antes?' },
+  { id: 7, text: 'Sua mente anda acelerada, especialmente à noite?' },
+  {
+    id: 8,
+    text: 'Você sente mais irritação ou sensibilidade emocional?',
+    empathy: 'Oscilações emocionais também são sinais do corpo 💚',
+  },
+  { id: 9, text: 'Você sente que perdeu parte da energia ou motivação?' },
+  { id: 10, text: 'Seu intestino parece mais lento do que antes?' },
+  { id: 11, text: 'Você sente retenção ou sensação de corpo pesado?' },
+  {
+    id: 12,
+    text: 'Você sente que não se reconhece mais no espelho ou no próprio corpo?',
+    empathy: 'Respira. Reconhecer isso já é um passo de cuidado.',
+  },
+  { id: 13, text: 'Você consegue caminhar ao menos 20 minutos?', positive: true },
+  { id: 14, text: 'Você consome muitos ultraprocessados?' },
+  { id: 15, text: 'Você consome fibras regularmente?', positive: true },
 ]
 
 // Retorna a pontuação (0-3) de uma resposta, considerando inversão.
