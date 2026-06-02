@@ -32,26 +32,36 @@ export default function Home({ onStart, onContinue }) {
           className="mt-6 text-[2rem] font-extrabold leading-[1.15] tracking-tight animate-fade-up"
           style={{ animationDelay: '0.1s' }}
         >
-          Seu corpo parece{' '}
-          <span className="text-neon-amber">pesado</span>,{' '}
-          <span className="text-neon-orange">inchado</span> e{' '}
+          Você sente que seu corpo{' '}
           <span className="text-neon-green drop-shadow-[0_0_12px_rgba(57,255,139,0.5)]">
-            fora de sintonia
+            mudou
           </span>
-          ?
+          … e não te avisou?
         </h1>
 
         <p
           className="mt-5 text-base leading-relaxed text-haze animate-fade-up"
           style={{ animationDelay: '0.18s' }}
         >
-          Talvez você não tenha desaprendido a cuidar de si. Seu corpo só pode estar
-          pedindo suporte diferente depois dos 40.
+          Barriga mais estufada. Cansaço do nada. Sono estranho. Inchaço. A sensação
+          de que algo saiu do eixo.
+        </p>
+        <p
+          className="mt-3 text-base font-semibold leading-relaxed text-white animate-fade-up"
+          style={{ animationDelay: '0.2s' }}
+        >
+          Seu corpo dá sinais antes de pedir socorro.
+        </p>
+        <p
+          className="mt-3 text-sm leading-relaxed text-haze animate-fade-up"
+          style={{ animationDelay: '0.22s' }}
+        >
+          Descubra em 2 minutos o que ele pode estar tentando te dizer.
         </p>
 
         <div
           className="mt-9 space-y-3 animate-fade-up"
-          style={{ animationDelay: '0.26s' }}
+          style={{ animationDelay: '0.28s' }}
         >
           <Button onClick={onStart} className="w-full">
             Fazer meu diagnóstico gratuito
@@ -83,9 +93,14 @@ export default function Home({ onStart, onContinue }) {
         </div>
       </main>
 
-      <p className="text-center text-sm font-medium text-haze/80">
-        <span className="text-white">PAUZEfem™</span> — Seu corpo de volta ao eixo.
-      </p>
+      <div className="text-center">
+        <p className="text-sm font-medium text-haze/80">
+          <span className="text-white">PAUZEfem™</span> — Seu corpo de volta ao eixo.
+        </p>
+        <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-neon-green/70">
+          Mais saúde. Menos dependência.
+        </p>
+      </div>
 
       <Footer />
     </div>

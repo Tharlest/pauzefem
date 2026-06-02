@@ -25,7 +25,7 @@ export default function Quiz({ onDone, onBack }) {
       } else {
         setIndex((i) => i + 1)
       }
-    }, 220)
+    }, 240)
   }
 
   function goBack() {
@@ -53,7 +53,7 @@ export default function Quiz({ onDone, onBack }) {
 
       <main className="flex flex-1 flex-col justify-center">
         <p className="text-xs font-semibold uppercase tracking-widest text-neon-green/80">
-          Quiz PAUZE™
+          Pergunta {index + 1} de {QUESTIONS.length}
         </p>
         <h2
           key={question.id}
@@ -62,7 +62,16 @@ export default function Quiz({ onDone, onBack }) {
           {question.text}
         </h2>
 
-        <div className="mt-8 space-y-3">
+        {question.empathy && (
+          <p
+            key={`emp-${question.id}`}
+            className="mt-3 flex items-start gap-2 rounded-2xl border border-neon-green/20 bg-neon-green/5 px-4 py-3 text-sm text-neon-green/90 animate-fade-up"
+          >
+            {question.empathy}
+          </p>
+        )}
+
+        <div className="mt-7 space-y-3">
           {ANSWER_LABELS.map((label, i) => {
             const active = selected === i
             return (

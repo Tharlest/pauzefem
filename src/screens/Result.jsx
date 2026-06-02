@@ -5,7 +5,15 @@ import NeonBar from '../components/NeonBar.jsx'
 import Footer from '../components/Footer.jsx'
 import { Button, Card } from '../components/ui.jsx'
 
-export default function Result({ onStartReset }) {
+const FOCUS = [
+  'retenção corporal',
+  'intestino',
+  'sono',
+  'energia',
+  'equilíbrio hormonal',
+]
+
+export default function Result({ onStartReset, onSeePremium }) {
   const { scores } = useStore()
   const value = scores?.scoreBemEstar ?? 0
   const band = getBand(value)
@@ -29,18 +37,21 @@ export default function Result({ onStartReset }) {
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col px-5 pb-8 pt-10">
       <main className="flex flex-1 flex-col">
-        <p className="text-center text-xs font-semibold uppercase tracking-widest text-neon-green/80 animate-fade-up">
-          Seu PAUZE Score™
+        <h2 className="text-center text-2xl font-extrabold leading-tight animate-fade-up">
+          TALVEZ VOCÊ NÃO TENHA FALHADO 💚
+        </h2>
+        <p className="mt-3 text-center text-sm leading-relaxed text-haze animate-fade-up">
+          Seu corpo pode apenas estar operando sob regras diferentes agora.
         </p>
 
-        <div className="mt-6 flex flex-col items-center animate-pop">
+        <div className="mt-7 flex flex-col items-center animate-pop">
           <div
-            className="relative flex h-44 w-44 items-center justify-center rounded-full"
+            className="relative flex h-40 w-40 items-center justify-center rounded-full"
             style={{
               background: `conic-gradient(${band.hex} ${value * 3.6}deg, rgba(255,255,255,0.06) 0deg)`,
             }}
           >
-            <div className="flex h-36 w-36 flex-col items-center justify-center rounded-full bg-ink-900">
+            <div className="flex h-32 w-32 flex-col items-center justify-center rounded-full bg-ink-900">
               <span
                 className="text-5xl font-extrabold"
                 style={{ color: band.hex, textShadow: `0 0 20px ${band.hex}66` }}
@@ -50,14 +61,10 @@ export default function Result({ onStartReset }) {
               <span className="text-xs font-medium text-haze">de bem-estar</span>
             </div>
           </div>
+          <p className="mt-4 text-center text-lg font-bold" style={{ color: band.hex }}>
+            {band.label}
+          </p>
         </div>
-
-        <h2
-          className="mt-7 text-center text-2xl font-bold animate-fade-up"
-          style={{ color: band.hex }}
-        >
-          {band.label}
-        </h2>
 
         <div className="mt-6 animate-fade-up">
           <NeonBar value={value} height={16} />
@@ -68,19 +75,33 @@ export default function Result({ onStartReset }) {
         </div>
 
         <Card className="mt-7 animate-fade-up">
-          <p className="text-center text-base font-semibold leading-relaxed text-white">
-            “Você não fracassou. Seu corpo só pode estar pedindo um ritmo diferente
-            agora.”
+          <p className="text-sm font-semibold text-white">
+            Seu resultado sugere atenção maior para:
           </p>
-          <p className="mt-3 text-center text-sm leading-relaxed text-haze">
-            {band.message}
+          <ul className="mt-3 space-y-2">
+            {FOCUS.map((f) => (
+              <li key={f} className="flex items-center gap-2 text-sm text-haze">
+                <span className="text-neon-green">✓</span>
+                {f}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-4 rounded-2xl border border-neon-green/20 bg-neon-green/5 px-4 py-3 text-sm leading-relaxed text-neon-green/90">
+            A boa notícia? Pequenos ajustes consistentes podem começar a fazer
+            diferença.
           </p>
         </Card>
 
-        <div className="mt-8 animate-fade-up">
+        <div className="mt-8 space-y-3 animate-fade-up">
           <Button onClick={onStartReset} className="w-full">
             Começar meu PAUZE Reset — 7 Dias™
           </Button>
+          <button
+            onClick={onSeePremium}
+            className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-haze"
+          >
+            Conhecer o PAUZEfem™ Premium ✨
+          </button>
         </div>
       </main>
 
