@@ -10,8 +10,9 @@ import Result from './screens/Result.jsx'
 import Reset from './screens/Reset.jsx'
 import Dashboard from './screens/Dashboard.jsx'
 import SmartList from './screens/SmartList.jsx'
+import Premium from './screens/Premium.jsx'
 
-const TAB_ROUTES = ['dashboard', 'reset', 'list']
+const TAB_ROUTES = ['dashboard', 'reset', 'list', 'premium']
 
 function Shell() {
   const { scores, soundOn } = useStore()
@@ -39,18 +40,26 @@ function Shell() {
         <Quiz onDone={() => setRoute('result')} onBack={() => setRoute('home')} />
       )}
 
-      {route === 'result' && <Result onStartReset={() => setRoute('reset')} />}
+      {route === 'result' && (
+        <Result
+          onStartReset={() => setRoute('reset')}
+          onSeePremium={() => setRoute('premium')}
+        />
+      )}
 
       {route === 'dashboard' && (
         <Dashboard
           onOpenReset={() => setRoute('reset')}
           onRetakeQuiz={() => setRoute('quiz')}
+          onSeePremium={() => setRoute('premium')}
         />
       )}
 
       {route === 'reset' && <Reset />}
 
       {route === 'list' && <SmartList />}
+
+      {route === 'premium' && <Premium />}
 
       {showNav && (
         <>
