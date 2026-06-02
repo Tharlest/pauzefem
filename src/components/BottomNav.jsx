@@ -3,12 +3,13 @@ const TABS = [
   { id: 'dashboard', label: 'Hoje', icon: '🏠' },
   { id: 'reset', label: 'Reset', icon: '🌱' },
   { id: 'list', label: 'Lista', icon: '🛒' },
+  { id: 'premium', label: 'Premium', icon: '✨' },
 ]
 
 export default function BottomNav({ active, onNavigate }) {
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-white/8 bg-ink-900/90 backdrop-blur-lg">
-      <div className="mx-auto flex max-w-md items-stretch justify-around px-2 pb-[env(safe-area-inset-bottom)]">
+      <div className="mx-auto flex max-w-md items-stretch justify-around px-1 pb-[env(safe-area-inset-bottom)]">
         {TABS.map((tab) => {
           const isActive = active === tab.id
           return (
