@@ -4,7 +4,7 @@ import { ToastProvider } from './components/Toast.jsx'
 import { setSoundEnabled } from './utils/feedback.js'
 import BottomNav from './components/BottomNav.jsx'
 import Footer from './components/Footer.jsx'
-import Home from './screens/Home.jsx'
+import Landing from './screens/Landing.jsx'
 import Quiz from './screens/Quiz.jsx'
 import Result from './screens/Result.jsx'
 import Reset from './screens/Reset.jsx'
@@ -16,8 +16,8 @@ const TAB_ROUTES = ['dashboard', 'reset', 'list', 'premium']
 
 function Shell() {
   const { scores, soundOn } = useStore()
-  // Início inteligente: se já tem score salvo, vai direto ao painel.
-  const [route, setRoute] = useState(scores ? 'dashboard' : 'home')
+  // Início inteligente: se já tem score salvo, vai direto ao painel; senão, landing (topo do funil).
+  const [route, setRoute] = useState(scores ? 'dashboard' : 'landing')
 
   useEffect(() => {
     setSoundEnabled(soundOn)
@@ -32,12 +32,12 @@ function Shell() {
 
   return (
     <div className="min-h-screen">
-      {route === 'home' && (
-        <Home onStart={() => setRoute('quiz')} onContinue={() => setRoute('dashboard')} />
+      {route === 'landing' && (
+        <Landing onStart={() => setRoute('quiz')} onContinue={() => setRoute('dashboard')} />
       )}
 
       {route === 'quiz' && (
-        <Quiz onDone={() => setRoute('result')} onBack={() => setRoute('home')} />
+        <Quiz onDone={() => setRoute('result')} onBack={() => setRoute('landing')} />
       )}
 
       {route === 'result' && (
