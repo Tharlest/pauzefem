@@ -1,13 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { QUESTIONS, ANSWER_LABELS } from '../data/quiz.js'
 import { useStore } from '../utils/store.jsx'
 import NeonBar from '../components/NeonBar.jsx'
 import { Button } from '../components/ui.jsx'
 import { tinyHaptic } from '../utils/feedback.js'
+import { trackEvent, EVENTS } from '../utils/analytics.js'
 
 export default function Quiz({ onDone, onBack }) {
   const { quizAnswers, setAnswer, finishQuiz } = useStore()
   const [index, setIndex] = useState(0)
+
+  // Dispara 'quiz_started' uma vez ao abrir o quiz.
+  useEffect(() => {
+    trackEvent(EVENTS.QUIZ_STARTED)
+  }, [])
 
   const question = QUESTIONS[index]
   const selected = quizAnswers[question.id]

@@ -1,8 +1,10 @@
+import { useEffect } from 'react'
 import Footer from '../components/Footer.jsx'
 import { Button, Card } from '../components/ui.jsx'
 import { openCheckout } from '../config.js'
 import { useToast } from '../components/Toast.jsx'
 import { tinyHaptic } from '../utils/feedback.js'
+import { trackEvent, EVENTS } from '../utils/analytics.js'
 
 const BENEFITS = [
   'PAUZE Reset — 7 Dias',
@@ -17,8 +19,14 @@ const BENEFITS = [
 export default function Premium({ onBack }) {
   const { showToast } = useToast()
 
+  // Dispara 'premium_viewed' ao abrir a tela PAUZEfem™ Completo.
+  useEffect(() => {
+    trackEvent(EVENTS.PREMIUM_VIEWED)
+  }, [])
+
   function handleBuy() {
     tinyHaptic()
+    trackEvent(EVENTS.CHECKOUT_CLICK)
     // Abre o checkout Kiwify; se a env var não existir, mostra fallback amigável.
     openCheckout((msg) => showToast(msg))
   }
