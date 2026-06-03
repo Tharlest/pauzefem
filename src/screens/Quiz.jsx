@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react'
-import { QUESTIONS, ANSWER_LABELS } from '../data/quiz.js'
+import { useState, useEffect, useMemo } from 'react'
+import { getActiveQuestions, getActiveAnswerLabels } from '../utils/questionStorage.js'
 import { useStore } from '../utils/store.jsx'
 import NeonBar from '../components/NeonBar.jsx'
 import { Button } from '../components/ui.jsx'
@@ -9,6 +9,10 @@ import { trackEvent, EVENTS } from '../utils/analytics.js'
 export default function Quiz({ onDone, onBack }) {
   const { quizAnswers, setAnswer, finishQuiz } = useStore()
   const [index, setIndex] = useState(0)
+
+  // Perguntas e rótulos ativos (editados no admin ou o padrão). Lidos ao montar.
+  const QUESTIONS = useMemo(() => getActiveQuestions(), [])
+  const ANSWER_LABELS = useMemo(() => getActiveAnswerLabels(), [])
 
   // Dispara 'quiz_started' uma vez ao abrir o quiz.
   useEffect(() => {
