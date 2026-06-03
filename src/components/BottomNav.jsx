@@ -3,7 +3,7 @@ const TABS = [
   { id: 'dashboard', label: 'Hoje', icon: '🏠' },
   { id: 'reset', label: 'Reset', icon: '🌱' },
   { id: 'list', label: 'Lista', icon: '🛒' },
-  { id: 'premium', label: 'Premium', icon: '✨' },
+  { id: 'premium', label: 'Completo', icon: '✨' },
 ]
 
 export default function BottomNav({ active, onNavigate }) {
