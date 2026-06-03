@@ -144,3 +144,40 @@ O projeto já vem com `vercel.json` configurado (framework Vite + fallback SPA).
    - **Valor/Aponta para:** `cname.vercel-dns.com`
 4. Salve. Em alguns minutos (propagação DNS) o endereço
    `https://fem.pauze.com.br` fica no ar, com HTTPS automático.
+
+---
+
+## Versionamento, backup e recovery
+
+Estratégia de versões (tags/releases no GitHub):
+
+| Versão | Marco |
+| --- | --- |
+| `v0.9-mvp-working` | MVP funcional (quiz, score, reset, dashboard) |
+| `v1.0-domain-live` | `fem.pauze.com.br` no ar com HTTPS |
+| `v1.1-premium-kiwify` | Tela PAUZEfem™ Completo + checkout Kiwify por env var |
+| `v1.2-admin-panel` | Área `/admin` + editor de perguntas (localStorage) |
+| `v1.3-landing-premium` | Landing premium + refinamentos + analytics (**atual**) |
+| `v1.4-axis-score` | (planejado) eixos/categorias e pesos por pergunta |
+
+Branch de produção estável: **`production-safe`** — só recebe código já validado.
+
+Fluxo recomendado:
+```
+feature/ajuste  →  npm run build (0 erros)  →  validação manual  →  merge em main
+                                                                    →  atualizar production-safe + tag
+```
+
+Snapshots ficam em `backups/` (convenção em `backups/README.md`). Recuperação
+passo a passo em **`RECOVERY.md`**.
+
+## Regra de deploy (obrigatória)
+
+Nunca subir código sem:
+
+1. `npm run build` com **0 erros**.
+2. Validação manual no celular: **landing · quiz · resultado · PAUZEfem™ Completo ·
+   checkout · domínio (HTTPS) · /admin**.
+
+Em caso de problema em produção, use o **rollback instantâneo da Vercel**
+(Deployments → ⋯ → Promote to Production) — ver `RECOVERY.md`.
