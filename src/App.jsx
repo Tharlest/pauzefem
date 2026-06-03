@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { StoreProvider, useStore } from './utils/store.jsx'
 import { ToastProvider } from './components/Toast.jsx'
 import { setSoundEnabled } from './utils/feedback.js'
+import { trackEvent, EVENTS } from './utils/analytics.js'
+import { Analytics } from '@vercel/analytics/react'
 import BottomNav from './components/BottomNav.jsx'
 import Footer from './components/Footer.jsx'
 import Landing from './screens/Landing.jsx'
@@ -32,12 +34,25 @@ function Shell() {
 
   return (
     <div className="min-h-screen">
+      <Analytics />
       {route === 'landing' && (
-        <Landing onStart={() => setRoute('quiz')} onContinue={() => setRoute('dashboard')} />
+        <Landing
+          onStart={() => {
+            trackEvent(EVENTS.LANDING_CTA_CLICK)
+            setRoute('quiz')
+          }}
+          onContinue={() => setRoute('dashboard')}
+        />
       )}
 
       {route === 'quiz' && (
-        <Quiz onDone={() => setRoute('result')} onBack={() => setRoute('landing')} />
+        <Quiz
+          onDone={() => {
+            trackEvent(EVENTS.QUIZ_COMPLETED)
+            setRoute('result')
+          }}
+          onBack={() => setRoute('landing')}
+        />
       )}
 
       {route === 'result' && (
