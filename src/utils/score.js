@@ -1,15 +1,20 @@
-import { QUESTIONS, MAX_PER_QUESTION, scoreAnswer } from '../data/quiz.js'
+import { MAX_PER_QUESTION, scoreAnswer } from '../data/quiz.js'
+import { getActiveQuestions } from './questionStorage.js'
 
-export const MAX_RAW = QUESTIONS.length * MAX_PER_QUESTION // 45
+// Mantido por compatibilidade; o cálculo real usa a quantidade ativa de perguntas.
+export const MAX_RAW = getActiveQuestions().length * MAX_PER_QUESTION
 
 // answers: objeto { [questionId]: answerIndex } ou array indexado.
+// Usa as perguntas ATIVAS (editadas no admin via localStorage, ou o padrão).
 export function computeScores(answers) {
+  const questions = getActiveQuestions()
+  const maxRaw = questions.length * MAX_PER_QUESTION
   let raw = 0
-  QUESTIONS.forEach((q, idx) => {
+  questions.forEach((q, idx) => {
     const a = Array.isArray(answers) ? answers[idx] : answers?.[q.id]
     raw += scoreAnswer(q, a)
   })
-  const scoreRisco = Math.round((raw / MAX_RAW) * 100)
+  const scoreRisco = maxRaw > 0 ? Math.round((raw / maxRaw) * 100) : 0
   const scoreBemEstar = 100 - scoreRisco
   return { raw, scoreRisco, scoreBemEstar }
 }
