@@ -35,6 +35,16 @@ export default function Quiz({ onDone, onBack }) {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-md flex-col px-5 pb-10 pt-6">
+      <div className="mb-3 text-center">
+        <p className="text-sm font-extrabold tracking-tight">
+          <span className="text-white">Diagnóstico </span>
+          <span className="text-neon-green">PAUZE™</span>
+        </p>
+        <p className="text-[11px] text-haze">
+          Baseado em hábitos e sinais do corpo feminino 40+
+        </p>
+      </div>
+
       <header className="flex items-center gap-3">
         <button
           onClick={goBack}

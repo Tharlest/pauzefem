@@ -2,9 +2,17 @@ import { useState } from 'react'
 import Logo from '../components/Logo.jsx'
 import { Button } from '../components/ui.jsx'
 
-// Landing premium dark neon, mobile-first. Vende o desejo de fazer o diagnóstico.
-// Não vende direto: todos os CTAs levam ao quiz gratuito.
-// Sem imagens de pessoas — apenas glow, gradientes, ícones e cards.
+// ============================================================
+// TOGGLE DE HEADLINE DA HERO — troque HERO_VARIANT entre 'A' e 'B'
+// para testar a primeira dobra sem mexer no resto do código.
+// ============================================================
+const HERO_VARIANTS = {
+  A: { lead: 'Seu corpo parece ', highlight: 'diferente', tail: '… e você não entende o porquê?' },
+  B: { lead: 'Você olha no espelho e sente que algo ', highlight: 'mudou', tail: ' no seu corpo?' },
+}
+const HERO_VARIANT = 'A'
+
+const CTA_LABEL = '💚 Fazer meu diagnóstico gratuito'
 
 function GlowOrb({ className = '', color = '#39FF8B' }) {
   return (
@@ -20,7 +28,7 @@ function Section({ children, className = '' }) {
   return <section className={`relative px-5 py-12 ${className}`}>{children}</section>
 }
 
-function CTA({ onStart, label = 'Fazer meu diagnóstico gratuito', micro }) {
+function CTA({ onStart, label = CTA_LABEL, micro }) {
   return (
     <div className="mt-7">
       <Button onClick={onStart} className="w-full">
@@ -31,11 +39,21 @@ function CTA({ onStart, label = 'Fazer meu diagnóstico gratuito', micro }) {
   )
 }
 
+// Faixa suave de micro UX (acolhimento).
+function SoftNote({ children }) {
+  return (
+    <p className="mx-auto mt-8 max-w-xs text-center text-sm font-medium text-neon-green/80">
+      {children}
+    </p>
+  )
+}
+
 export default function Landing({ onStart, onContinue }) {
   const [showModal, setShowModal] = useState(false)
+  const hero = HERO_VARIANTS[HERO_VARIANT]
 
   return (
-    <div className="mx-auto max-w-md overflow-hidden">
+    <div className="relative mx-auto max-w-md overflow-hidden pb-24">
       {/* HERO */}
       <Section className="pt-8">
         <GlowOrb className="-right-16 -top-10 h-56 w-56" color="#39FF8B" />
@@ -61,11 +79,11 @@ export default function Landing({ onStart, onContinue }) {
             className="mt-6 text-[2.1rem] font-extrabold leading-[1.12] tracking-tight animate-fade-up"
             style={{ animationDelay: '0.06s' }}
           >
-            Você sente que seu corpo{' '}
+            {hero.lead}
             <span className="text-neon-green drop-shadow-[0_0_14px_rgba(57,255,139,0.55)]">
-              mudou
+              {hero.highlight}
             </span>
-            … e não te avisou?
+            {hero.tail}
           </h1>
 
           <div
@@ -86,7 +104,38 @@ export default function Landing({ onStart, onContinue }) {
         </div>
       </Section>
 
-      {/* 2. IDENTIFICAÇÃO EMOCIONAL */}
+      {/* 2. WOW EMOCIONAL */}
+      <Section>
+        <GlowOrb className="-left-24 top-6 h-56 w-56" color="#39FF8B" />
+        <div className="relative rounded-3xl border border-neon-green/20 bg-gradient-to-b from-neon-green/8 to-transparent p-6">
+          <h2 className="text-2xl font-extrabold leading-snug">
+            Talvez você não esteja falhando 💚
+          </h2>
+          <p className="mt-3 text-sm leading-relaxed text-haze">
+            Talvez você não esteja “engordando”. Talvez seu corpo esteja apenas tentando
+            pedir ajuda de outro jeito.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {['Hormônios', 'Sono', 'Estresse', 'Intestino', 'Retenção', 'Inflamação'].map(
+              (t) => (
+                <span
+                  key={t}
+                  className="rounded-full border border-white/10 bg-ink-700/60 px-3 py-1.5 text-xs font-medium text-haze"
+                >
+                  {t}
+                </span>
+              ),
+            )}
+          </div>
+          <p className="mt-4 text-sm text-haze">
+            Tudo isso pode influenciar como você se sente.
+          </p>
+          <CTA onStart={onStart} label="Descobrir o que meu corpo pode estar tentando dizer" />
+        </div>
+        <SoftNote>Você não está sozinha nisso. 💚</SoftNote>
+      </Section>
+
+      {/* 3. IDENTIFICAÇÃO EMOCIONAL */}
       <Section>
         <GlowOrb className="-right-24 top-10 h-52 w-52" color="#FFC857" />
         <h2 className="relative text-2xl font-bold leading-snug">
@@ -117,53 +166,43 @@ export default function Landing({ onStart, onContinue }) {
         <p className="relative mt-6 rounded-2xl border border-neon-amber/25 bg-neon-amber/5 px-4 py-3 text-center text-base font-semibold text-neon-amber">
           “Meu corpo saiu do controle.”
         </p>
-        <CTA
-          onStart={onStart}
-          label="Descobrir o que meu corpo pode estar tentando dizer"
-        />
+        <CTA onStart={onStart} label="Descobrir o que meu corpo pode estar tentando dizer" />
       </Section>
 
-      {/* 3. QUEBRA DE CRENÇA */}
+      {/* 4. PROVA EMOCIONAL */}
       <Section>
-        <GlowOrb className="-left-24 top-6 h-56 w-56" color="#39FF8B" />
-        <div className="relative rounded-3xl border border-neon-green/20 bg-gradient-to-b from-neon-green/8 to-transparent p-6">
-          <h2 className="text-2xl font-extrabold leading-snug">
-            Talvez você não tenha falhado 💚
-          </h2>
-          <p className="mt-3 text-sm leading-relaxed text-haze">
-            Talvez seu corpo esteja apenas operando sob regras diferentes agora.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {['Hormônios', 'Sono', 'Estresse', 'Intestino', 'Retenção', 'Inflamação'].map(
-              (t) => (
-                <span
-                  key={t}
-                  className="rounded-full border border-white/10 bg-ink-700/60 px-3 py-1.5 text-xs font-medium text-haze"
-                >
-                  {t}
-                </span>
-              ),
-            )}
-          </div>
-          <p className="mt-4 text-sm text-haze">
-            Tudo isso pode influenciar como você se sente.
-          </p>
-          <CTA onStart={onStart} />
+        <GlowOrb className="-left-20 top-0 h-52 w-52" color="#FF5C6C" />
+        <h2 className="relative text-2xl font-bold">Talvez você se identifique…</h2>
+        <div className="relative mt-5 space-y-3">
+          {[
+            'Parecia que meu corpo não era mais meu.',
+            'Acordei inchada do nada.',
+            'Não me reconhecia no espelho.',
+            'Achei que estava enlouquecendo.',
+            'Eu tentava me cuidar e nada parecia funcionar.',
+          ].map((q) => (
+            <div
+              key={q}
+              className="rounded-2xl border border-white/8 bg-ink-800/60 px-4 py-3.5"
+            >
+              <p className="text-sm italic leading-relaxed text-white">“{q}”</p>
+            </div>
+          ))}
         </div>
+        <p className="relative mt-5 text-center text-sm text-haze">
+          Muitas mulheres 40+ relatam sentimentos parecidos.
+        </p>
+        <CTA onStart={onStart} />
       </Section>
 
-      {/* 4. COMO FUNCIONA */}
+      {/* 5. COMO FUNCIONA */}
       <Section>
         <h2 className="text-2xl font-bold">Como funciona o PAUZEfem™</h2>
         <div className="mt-5 space-y-3">
           {[
             { n: 1, t: 'Faça seu diagnóstico gratuito', i: '🧭' },
             { n: 2, t: 'Entenda melhor os sinais do seu corpo', i: '🌗' },
-            {
-              n: 3,
-              t: 'Receba caminhos simples e possíveis para o seu momento atual',
-              i: '🌱',
-            },
+            { n: 3, t: 'Receba caminhos simples e possíveis para o seu momento atual', i: '🌱' },
             { n: 4, t: 'Acompanhe sua evolução', i: '📈' },
           ].map((s) => (
             <div
@@ -178,11 +217,12 @@ export default function Landing({ onStart, onContinue }) {
             </div>
           ))}
         </div>
+        <SoftNote>Pequenos passos também contam 💚</SoftNote>
       </Section>
 
-      {/* 5. BENEFÍCIOS */}
+      {/* 6. BENEFÍCIOS */}
       <Section>
-        <GlowOrb className="-right-20 top-0 h-52 w-52" color="#FF5C6C" />
+        <GlowOrb className="-right-20 top-0 h-52 w-52" color="#39FF8B" />
         <h2 className="relative text-2xl font-bold">Pequenos passos também contam 💚</h2>
         <div className="relative mt-5 grid grid-cols-2 gap-3">
           {[
@@ -205,7 +245,7 @@ export default function Landing({ onStart, onContinue }) {
         <CTA onStart={onStart} micro="Leva apenas 2 minutos" />
       </Section>
 
-      {/* 6. OBJEÇÕES */}
+      {/* 7. OBJEÇÕES */}
       <Section>
         <h2 className="text-2xl font-bold">Não é sobre perfeição.</h2>
         <div className="mt-5 grid gap-3">
@@ -240,9 +280,10 @@ export default function Landing({ onStart, onContinue }) {
             </ul>
           </div>
         </div>
+        <SoftNote>Consistência vale mais que perfeição.</SoftNote>
       </Section>
 
-      {/* 7. CTA FINAL */}
+      {/* 8. CTA FINAL */}
       <Section className="pb-4">
         <GlowOrb className="left-1/2 top-0 h-60 w-60 -translate-x-1/2" color="#39FF8B" />
         <div className="relative rounded-3xl border border-white/10 bg-ink-800/70 p-7 text-center shadow-neon-soft">
@@ -254,10 +295,11 @@ export default function Landing({ onStart, onContinue }) {
           </p>
           <CTA onStart={onStart} micro="Leva menos de 2 minutos" />
         </div>
+        <SoftNote>Seu corpo ainda está aqui por você 🌿</SoftNote>
       </Section>
 
-      {/* 8. RODAPÉ */}
-      <footer className="px-5 pb-10 pt-6 text-center">
+      {/* RODAPÉ */}
+      <footer className="px-5 pb-6 pt-6 text-center">
         <p className="mx-auto max-w-sm text-xs leading-relaxed text-haze/80">
           Ferramenta educativa de bem-estar feminino. Não substitui atendimento médico.
         </p>
@@ -271,6 +313,17 @@ export default function Landing({ onStart, onContinue }) {
           © {new Date().getFullYear()} PAUZEfem™ · Seu corpo de volta ao eixo.
         </p>
       </footer>
+
+      {/* CTA FIXO MOBILE — sempre visível no scroll */}
+      <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-[max(env(safe-area-inset-bottom),12px)] pt-3">
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ink-900 to-transparent" />
+        <button
+          onClick={onStart}
+          className="relative mx-auto flex w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-neon-green px-6 py-4 text-base font-bold text-ink-900 shadow-neon-green transition-all active:scale-[0.98]"
+        >
+          💚 Fazer meu diagnóstico
+        </button>
+      </div>
 
       {/* Modal uso responsável */}
       {showModal && (

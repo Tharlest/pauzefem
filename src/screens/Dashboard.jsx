@@ -232,7 +232,7 @@ export default function Dashboard({ onOpenReset, onRetakeQuiz, onSeePremium }) {
         className="mt-4 flex w-full items-center justify-between rounded-3xl border border-neon-green/40 bg-neon-green/5 px-5 py-4 text-left shadow-neon-green active:scale-[0.99]"
       >
         <div>
-          <p className="text-sm font-bold text-white">PAUZEfem™ Premium ✨</p>
+          <p className="text-sm font-bold text-white">PAUZEfem™ Completo ✨</p>
           <p className="text-xs text-haze">Suporte completo para seu corpo, dia após dia.</p>
         </div>
         <span className="text-neon-green">→</span>

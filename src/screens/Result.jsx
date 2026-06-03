@@ -100,7 +100,7 @@ export default function Result({ onStartReset, onSeePremium }) {
             onClick={onSeePremium}
             className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-semibold text-haze"
           >
-            Conhecer o PAUZEfem™ Premium ✨
+            Conhecer o PAUZEfem™ Completo ✨
           </button>
         </div>
       </main>

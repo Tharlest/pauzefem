@@ -37,7 +37,7 @@ export default function Premium({ onBack }) {
 
       <header className="animate-fade-up">
         <p className="text-xs font-semibold uppercase tracking-widest text-neon-green/80">
-          PAUZEfem™ Premium
+          PAUZEfem™ Completo
         </p>
         <h2 className="mt-2 text-[1.9rem] font-extrabold leading-tight">
           Comece hoje por{' '}
@@ -84,7 +84,7 @@ export default function Premium({ onBack }) {
           <p className="text-4xl font-extrabold text-white">
             R$ 19<span className="text-2xl text-haze">,90</span>
           </p>
-          <p className="text-xs text-haze">acesso ao PAUZEfem™ Premium</p>
+          <p className="text-xs text-haze">acesso ao PAUZEfem™ Completo</p>
         </div>
       </div>
 
