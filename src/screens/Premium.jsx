@@ -1,6 +1,7 @@
 import Footer from '../components/Footer.jsx'
 import { Button, Card } from '../components/ui.jsx'
 import { openCheckout } from '../config.js'
+import { useToast } from '../components/Toast.jsx'
 import { tinyHaptic } from '../utils/feedback.js'
 
 const BENEFITS = [
@@ -14,9 +15,12 @@ const BENEFITS = [
 ]
 
 export default function Premium({ onBack }) {
+  const { showToast } = useToast()
+
   function handleBuy() {
     tinyHaptic()
-    openCheckout()
+    // Abre o checkout Kiwify; se a env var não existir, mostra fallback amigável.
+    openCheckout((msg) => showToast(msg))
   }
 
   return (
