@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Card } from '../components/ui.jsx'
 import { openCheckout } from '../config.js'
 import {
@@ -17,6 +17,8 @@ import {
   exportJSON,
   importJSON,
 } from '../utils/questionStorage.js'
+import { getMetrics, resetMetrics, countSince, isActiveNow } from '../utils/metrics.js'
+import { HEADLINES, getOverride, setOverride } from '../data/headlines.js'
 
 // Navega para o app público numa tela específica (deep-link via sessionStorage).
 function openScreen(screen) {
@@ -268,6 +270,166 @@ function Editor() {
   )
 }
 
+function StatBox({ label, value, sub, accent = '#FFFFFF' }) {
+  return (
+    <div className="rounded-2xl border border-white/8 bg-ink-700/50 px-3 py-3 text-center">
+      <div className="text-2xl font-extrabold" style={{ color: accent }}>
+        {value}
+      </div>
+      <div className="mt-0.5 text-[11px] font-medium uppercase tracking-wide text-haze">
+        {label}
+      </div>
+      {sub && <div className="mt-0.5 text-[10px] text-haze/60">{sub}</div>}
+    </div>
+  )
+}
+
+function pct(a, b) {
+  return b > 0 ? Math.round((a / b) * 100) : 0
+}
+
+function ConvRow({ label, value }) {
+  return (
+    <div className="flex items-center justify-between rounded-xl border border-white/8 bg-ink-700/40 px-4 py-2.5">
+      <span className="text-sm text-haze">{label}</span>
+      <span className="text-sm font-bold text-neon-green">{value}%</span>
+    </div>
+  )
+}
+
+function ActivityPanel() {
+  const [m, setM] = useState(() => getMetrics())
+  useEffect(() => {
+    const id = setInterval(() => setM(getMetrics()), 5000)
+    return () => clearInterval(id)
+  }, [])
+
+  const c = m.counts || {}
+  const day = 24 * 60 * 60 * 1000
+  const visits24 = countSince('landing_view', day)
+  const ativos = isActiveNow()
+  const landingViews = c.landing_view || 0
+  const quizStarted = c.quiz_started || 0
+  const quizCompleted = c.quiz_completed || 0
+  const checkout = c.checkout_click || 0
+
+  const aband = (m.byQuestion && m.byQuestion.quiz_abandon) || {}
+  const abandList = Object.entries(aband).sort((a, b) => b[1] - a[1]).slice(0, 5)
+
+  return (
+    <div className="space-y-3">
+      <div className="grid grid-cols-3 gap-2">
+        <StatBox label="Ativos agora" value={ativos} accent="#39FF8B" sub="sua sessão" />
+        <StatBox label="Visitas 24h" value={visits24} />
+        <StatBox label="Quizzes iniciados" value={quizStarted} accent="#FFC857" />
+        <StatBox label="Quizzes concluídos" value={quizCompleted} accent="#39FF8B" />
+        <StatBox label="Cliques checkout" value={checkout} accent="#FF9F45" />
+        <StatBox label="Landing views" value={landingViews} />
+      </div>
+
+      <div className="space-y-2">
+        <ConvRow label="Landing → Quiz" value={pct(quizStarted, landingViews)} />
+        <ConvRow label="Quiz → Resultado" value={pct(quizCompleted, quizStarted)} />
+        <ConvRow label="Resultado → Checkout" value={pct(checkout, quizCompleted)} />
+      </div>
+
+      {abandList.length > 0 && (
+        <div className="rounded-2xl border border-white/8 bg-ink-700/40 p-3">
+          <p className="text-xs font-semibold text-white">Onde abandonam o quiz</p>
+          <div className="mt-2 space-y-1">
+            {abandList.map(([q, n]) => (
+              <div key={q} className="flex items-center justify-between text-xs text-haze">
+                <span>Pergunta {q}</span>
+                <span className="font-bold text-neon-red">{n}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <p className="rounded-2xl border border-neon-amber/25 bg-neon-amber/5 px-3 py-2.5 text-[11px] leading-relaxed text-neon-amber">
+        Métricas locais e anônimas (este navegador) — LGPD-friendly: sem IP, sem cookies
+        de rastreamento. Para números globais entre usuárias e região aproximada, use o
+        Vercel Web Analytics (anônimo/cookieless).
+      </p>
+
+      <button
+        onClick={() => {
+          resetMetrics()
+          setM(getMetrics())
+        }}
+        className="w-full rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold text-haze"
+      >
+        Zerar métricas locais
+      </button>
+    </div>
+  )
+}
+
+function HeadlineABPanel() {
+  const [override, setOv] = useState(() => getOverride())
+  const m = getMetrics()
+  const bv = m.byVariant || {}
+
+  function choose(v) {
+    setOverride(v)
+    setOv(v)
+  }
+
+  const options = [
+    { key: 'A', label: HEADLINES.A.lead + HEADLINES.A.highlight + HEADLINES.A.tail },
+    { key: 'B', label: HEADLINES.B.lead + HEADLINES.B.highlight + HEADLINES.B.tail },
+    { key: 'C', label: HEADLINES.C.lead + HEADLINES.C.highlight + HEADLINES.C.tail },
+  ]
+
+  return (
+    <div className="space-y-3">
+      <div className="space-y-2">
+        {options.map((o) => {
+          const v = bv[o.key] || {}
+          const imp = v.landing_view || 0
+          const clk = v.landing_cta_click || 0
+          const ctr = imp > 0 ? Math.round((clk / imp) * 100) : 0
+          const active = override === o.key
+          return (
+            <button
+              key={o.key}
+              onClick={() => choose(o.key)}
+              className={`w-full rounded-2xl border px-4 py-3 text-left transition-all ${
+                active
+                  ? 'border-neon-green bg-neon-green/10'
+                  : 'border-white/10 bg-ink-700/40'
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-neon-green">Headline {o.key}</span>
+                <span className="text-xs text-haze">
+                  CTR {ctr}% · {clk}/{imp}
+                </span>
+              </div>
+              <p className="mt-1 text-sm text-white">{o.label}</p>
+            </button>
+          )
+        })}
+      </div>
+      <button
+        onClick={() => choose('')}
+        className={`w-full rounded-xl border px-4 py-2 text-xs font-semibold ${
+          override === ''
+            ? 'border-neon-green/50 text-neon-green'
+            : 'border-white/10 text-haze'
+        }`}
+      >
+        Automático (aleatório entre visitantes)
+      </button>
+      <p className="text-[11px] leading-relaxed text-haze/60">
+        "Automático" distribui as headlines entre visitantes e mede o CTR real. Escolher
+        uma força essa headline (preview/teste). CTR = cliques no CTA ÷ visualizações.
+      </p>
+    </div>
+  )
+}
+
 export default function Admin({ onExit }) {
   const [unlocked, setUnlocked] = useState(() => isUnlocked())
   const [checkoutMsg, setCheckoutMsg] = useState('')
@@ -323,6 +485,26 @@ export default function Admin({ onExit }) {
         {checkoutMsg && (
           <p className="mt-2 text-center text-xs text-neon-amber">{checkoutMsg}</p>
         )}
+      </section>
+
+      {/* Atividade & Conversão */}
+      <section className="mt-7">
+        <p className="text-xs font-semibold uppercase tracking-widest text-neon-green/80">
+          Atividade &amp; conversão
+        </p>
+        <div className="mt-3">
+          <ActivityPanel />
+        </div>
+      </section>
+
+      {/* Teste A/B de headline */}
+      <section className="mt-7">
+        <p className="text-xs font-semibold uppercase tracking-widest text-neon-green/80">
+          Teste A/B da headline
+        </p>
+        <div className="mt-3">
+          <HeadlineABPanel />
+        </div>
       </section>
 
       {/* B) Editor de perguntas */}
