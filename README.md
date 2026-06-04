@@ -157,8 +157,9 @@ Estratégia de versões (tags/releases no GitHub):
 | `v1.0-domain-live` | `fem.pauze.com.br` no ar com HTTPS |
 | `v1.1-premium-kiwify` | Tela PAUZEfem™ Completo + checkout Kiwify por env var |
 | `v1.2-admin-panel` | Área `/admin` + editor de perguntas (localStorage) |
-| `v1.3-landing-premium` | Landing premium + refinamentos + analytics (**atual**) |
-| `v1.4-axis-score` | (planejado) eixos/categorias e pesos por pergunta |
+| `v1.3-landing-premium` | Landing premium + refinamentos + analytics |
+| `v1.4-conversao-captura` | Captura de lead + heatmap/painel no /admin + A/B de headlines (**atual**) |
+| `v1.5-axis-score` | (planejado) eixos/categorias e pesos por pergunta |
 
 Branch de produção estável: **`production-safe`** — só recebe código já validado.
 

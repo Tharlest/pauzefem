@@ -7,10 +7,11 @@ sem depender de memória. Três caminhos de rollback, do mais rápido ao mais co
 
 ## 0. Versão atual segura
 
-> **v1.3-landing-premium** — domínio `fem.pauze.com.br` no ar (HTTPS), funil
-> Landing → Quiz → Resultado → PAUZEfem™ Completo → Checkout Kiwify, analytics e
-> área `/admin` funcionando. Marcada como Release no GitHub e refletida na branch
-> `production-safe`.
+> **v1.4-conversao-captura** — domínio `fem.pauze.com.br` no ar (HTTPS), funil
+> Landing → Quiz → Resultado → Captura de lead → PAUZEfem™ Completo → Checkout Kiwify,
+> com captura de e-mail/WhatsApp, heatmap de funil + painel de conversão no `/admin`,
+> teste A/B de headlines (CTR) e analytics. Marcada como Release no GitHub e refletida
+> na branch `production-safe`.
 
 Histórico de versões: ver seção "Versionamento" no `README.md`.
 
