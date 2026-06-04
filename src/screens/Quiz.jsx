@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { getActiveQuestions, getActiveAnswerLabels } from '../utils/questionStorage.js'
 import { useStore } from '../utils/store.jsx'
 import NeonBar from '../components/NeonBar.jsx'
@@ -14,10 +14,25 @@ export default function Quiz({ onDone, onBack }) {
   const QUESTIONS = useMemo(() => getActiveQuestions(), [])
   const ANSWER_LABELS = useMemo(() => getActiveAnswerLabels(), [])
 
-  // Dispara 'quiz_started' uma vez ao abrir o quiz.
+  // Refs para detectar abandono no unmount sem closures obsoletas.
+  const completedRef = useRef(false)
+  const indexRef = useRef(0)
+
+  // 'quiz_started' ao abrir; 'quiz_abandon' se sair sem concluir.
   useEffect(() => {
     trackEvent(EVENTS.QUIZ_STARTED)
+    return () => {
+      if (!completedRef.current) {
+        trackEvent(EVENTS.QUIZ_ABANDON, { question: indexRef.current + 1 })
+      }
+    }
   }, [])
+
+  // Heatmap: registra cada pergunta alcançada.
+  useEffect(() => {
+    indexRef.current = index
+    trackEvent(EVENTS.QUIZ_QUESTION_REACHED, { question: index + 1 })
+  }, [index])
 
   const question = QUESTIONS[index]
   const selected = quizAnswers[question.id]
@@ -30,6 +45,7 @@ export default function Quiz({ onDone, onBack }) {
     // Avança automaticamente após um breve respiro.
     setTimeout(() => {
       if (isLast) {
+        completedRef.current = true
         finishQuiz()
         onDone()
       } else {

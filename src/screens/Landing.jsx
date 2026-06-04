@@ -1,17 +1,10 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo } from 'react'
 import Logo from '../components/Logo.jsx'
 import { Button } from '../components/ui.jsx'
+import { HEADLINES, getActiveVariant } from '../data/headlines.js'
+import { trackEvent, EVENTS } from '../utils/analytics.js'
 
-// ============================================================
-// TOGGLE DE HEADLINE DA HERO — troque HERO_VARIANT entre 'A' e 'B'
-// para testar a primeira dobra sem mexer no resto do código.
-// ============================================================
-const HERO_VARIANTS = {
-  A: { lead: 'Seu corpo parece ', highlight: 'diferente', tail: '… e você não entende o porquê?' },
-  B: { lead: 'Você olha no espelho e sente que algo ', highlight: 'mudou', tail: ' no seu corpo?' },
-}
-const HERO_VARIANT = 'A'
-
+// Headlines A/B/C vêm de ../data/headlines.js (com atribuição/CTR).
 const CTA_LABEL = '💚 Fazer meu diagnóstico gratuito'
 
 function GlowOrb({ className = '', color = '#39FF8B' }) {
@@ -50,7 +43,19 @@ function SoftNote({ children }) {
 
 export default function Landing({ onStart, onContinue }) {
   const [showModal, setShowModal] = useState(false)
-  const hero = HERO_VARIANTS[HERO_VARIANT]
+  const variant = useMemo(() => getActiveVariant(), [])
+  const hero = HEADLINES[variant] || HEADLINES.A
+
+  // Impressão da headline (para CTR do teste A/B) + entrada na landing.
+  useEffect(() => {
+    trackEvent(EVENTS.LANDING_VIEW, { variant })
+  }, [variant])
+
+  // CTA: registra clique com a variante e segue para o quiz.
+  function start() {
+    trackEvent(EVENTS.LANDING_CTA_CLICK, { variant })
+    onStart()
+  }
 
   return (
     <div className="relative mx-auto max-w-md overflow-hidden pb-24">
@@ -100,7 +105,7 @@ export default function Landing({ onStart, onContinue }) {
             Talvez seu corpo esteja apenas pedindo suporte diferente agora.
           </p>
 
-          <CTA onStart={onStart} micro="Leva apenas 2 minutos · Sem cadastro" />
+          <CTA onStart={start} micro="Leva apenas 2 minutos · Sem cadastro" />
         </div>
       </Section>
 
@@ -130,7 +135,7 @@ export default function Landing({ onStart, onContinue }) {
           <p className="mt-4 text-sm text-haze">
             Tudo isso pode influenciar como você se sente.
           </p>
-          <CTA onStart={onStart} label="Descobrir o que meu corpo pode estar tentando dizer" />
+          <CTA onStart={start} label="Descobrir o que meu corpo pode estar tentando dizer" />
         </div>
         <SoftNote>Você não está sozinha nisso. 💚</SoftNote>
       </Section>
@@ -166,7 +171,7 @@ export default function Landing({ onStart, onContinue }) {
         <p className="relative mt-6 rounded-2xl border border-neon-amber/25 bg-neon-amber/5 px-4 py-3 text-center text-base font-semibold text-neon-amber">
           “Meu corpo saiu do controle.”
         </p>
-        <CTA onStart={onStart} label="Descobrir o que meu corpo pode estar tentando dizer" />
+        <CTA onStart={start} label="Descobrir o que meu corpo pode estar tentando dizer" />
       </Section>
 
       {/* 4. PROVA EMOCIONAL */}
@@ -192,7 +197,7 @@ export default function Landing({ onStart, onContinue }) {
         <p className="relative mt-5 text-center text-sm text-haze">
           Muitas mulheres 40+ relatam sentimentos parecidos.
         </p>
-        <CTA onStart={onStart} />
+        <CTA onStart={start} />
       </Section>
 
       {/* 5. COMO FUNCIONA */}
@@ -242,7 +247,7 @@ export default function Landing({ onStart, onContinue }) {
             </div>
           ))}
         </div>
-        <CTA onStart={onStart} micro="Leva apenas 2 minutos" />
+        <CTA onStart={start} micro="Leva apenas 2 minutos" />
       </Section>
 
       {/* 7. OBJEÇÕES */}
@@ -293,7 +298,7 @@ export default function Landing({ onStart, onContinue }) {
           <p className="mt-3 text-sm leading-relaxed text-haze">
             Talvez começar a entender esses sinais seja um bom começo.
           </p>
-          <CTA onStart={onStart} micro="Leva menos de 2 minutos" />
+          <CTA onStart={start} micro="Leva menos de 2 minutos" />
         </div>
         <SoftNote>Seu corpo ainda está aqui por você 🌿</SoftNote>
       </Section>
@@ -318,7 +323,7 @@ export default function Landing({ onStart, onContinue }) {
       <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-[max(env(safe-area-inset-bottom),12px)] pt-3">
         <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ink-900 to-transparent" />
         <button
-          onClick={onStart}
+          onClick={start}
           className="relative mx-auto flex w-full max-w-md items-center justify-center gap-2 rounded-2xl bg-neon-green px-6 py-4 text-base font-bold text-ink-900 shadow-neon-green transition-all active:scale-[0.98]"
         >
           💚 Fazer meu diagnóstico

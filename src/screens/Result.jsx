@@ -4,6 +4,7 @@ import { getBand } from '../utils/score.js'
 import NeonBar from '../components/NeonBar.jsx'
 import Footer from '../components/Footer.jsx'
 import { Button, Card } from '../components/ui.jsx'
+import { trackEvent, EVENTS } from '../utils/analytics.js'
 
 const FOCUS = [
   'retenção corporal',
@@ -13,7 +14,12 @@ const FOCUS = [
   'equilíbrio hormonal',
 ]
 
-export default function Result({ onStartReset, onSeePremium }) {
+export default function Result({ onStartReset, onSeePremium, onSaveResult }) {
+  function handleSaveResult() {
+    trackEvent(EVENTS.RESULT_SAVED)
+    if (onSaveResult) onSaveResult()
+  }
+
   const { scores } = useStore()
   const value = scores?.scoreBemEstar ?? 0
   const band = getBand(value)
@@ -92,9 +98,16 @@ export default function Result({ onStartReset, onSeePremium }) {
           </p>
         </Card>
 
-        <div className="mt-8 space-y-3 animate-fade-up">
+        <p className="mt-7 text-center text-sm font-semibold text-neon-green/90 animate-fade-up">
+          Você não está sozinha nisso 💚
+        </p>
+
+        <div className="mt-4 space-y-3 animate-fade-up">
           <Button onClick={onStartReset} className="w-full">
             Começar meu PAUZE Reset — 7 Dias™
+          </Button>
+          <Button onClick={handleSaveResult} variant="outline" className="w-full">
+            Salvar meu resultado 💾
           </Button>
           <button
             onClick={onSeePremium}

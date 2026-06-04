@@ -13,10 +13,11 @@ import Reset from './screens/Reset.jsx'
 import Dashboard from './screens/Dashboard.jsx'
 import SmartList from './screens/SmartList.jsx'
 import Premium from './screens/Premium.jsx'
+import LeadCapture from './screens/LeadCapture.jsx'
 import Admin from './screens/Admin.jsx'
 
 const TAB_ROUTES = ['dashboard', 'reset', 'list', 'premium']
-const FUNNEL_ROUTES = ['landing', 'quiz', 'result', 'premium', 'dashboard', 'reset', 'list']
+const FUNNEL_ROUTES = ['landing', 'quiz', 'result', 'lead', 'premium', 'dashboard', 'reset', 'list']
 
 // Decide a tela inicial sem mexer no funil público:
 // 1) deep-link vindo do admin (sessionStorage), 2) rota /admin, 3) funil normal.
@@ -59,13 +60,7 @@ function Shell() {
     <div className="min-h-screen">
       <Analytics />
       {route === 'landing' && (
-        <Landing
-          onStart={() => {
-            trackEvent(EVENTS.LANDING_CTA_CLICK)
-            setRoute('quiz')
-          }}
-          onContinue={() => setRoute('dashboard')}
-        />
+        <Landing onStart={() => setRoute('quiz')} onContinue={() => setRoute('dashboard')} />
       )}
 
       {route === 'quiz' && (
@@ -81,7 +76,8 @@ function Shell() {
       {route === 'result' && (
         <Result
           onStartReset={() => setRoute('reset')}
-          onSeePremium={() => setRoute('premium')}
+          onSeePremium={() => setRoute('lead')}
+          onSaveResult={() => setRoute('lead')}
         />
       )}
 
@@ -96,6 +92,13 @@ function Shell() {
       {route === 'reset' && <Reset />}
 
       {route === 'list' && <SmartList />}
+
+      {route === 'lead' && (
+        <LeadCapture
+          onContinue={() => setRoute('premium')}
+          onSkip={() => setRoute('premium')}
+        />
+      )}
 
       {route === 'premium' && <Premium />}
 
