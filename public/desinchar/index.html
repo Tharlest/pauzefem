@@ -27,8 +27,8 @@
 <meta name="twitter:image" content="https://fem.pauze.com.br/desinchar/og-image.png">
 
 <!-- ===================== FAVICON ===================== -->
-<link rel="icon" href="favicon.ico" sizes="any">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" href="/desinchar/favicon.ico" sizes="any">
+<link rel="icon" type="image/svg+xml" href="/desinchar/favicon.svg">
 
 <style>
   :root{
@@ -227,7 +227,7 @@
 /* ============================================================
    CONFIGURAÇÃO — edite apenas estas duas linhas
    ============================================================ */
-const PDF_LINK  = "guia-desinchar.pdf";  // o PDF ja vem incluido. Troque por um link externo se quiser.
+const PDF_LINK  = "/desinchar/guia-desinchar.pdf";  // caminho absoluto (a pagina abre sem barra final)
 const QUIZ_LINK = "https://fem.pauze.com.br/?utm_source=facebook&utm_medium=landing&utm_campaign=desinchar"; // link da avaliacao
 
 /* (Opcional) IDs de rastreamento — deixe vazio para desativar */
@@ -242,8 +242,8 @@ document.getElementById('ano').textContent=new Date().getFullYear();
 /* ---- foto do hero (se existir hero.webp) ---- */
 (function(){
   var img=new Image();
-  img.onload=function(){var h=document.getElementById('heroImg'); h.style.background="center/cover no-repeat url('hero.webp')"; h.innerHTML="";};
-  img.src="hero.webp";
+  img.onload=function(){var h=document.getElementById('heroImg'); h.style.background="center/cover no-repeat url('/desinchar/hero.webp')"; h.innerHTML="";};
+  img.src="/desinchar/hero.webp";
 })();
 
 /* ---- Meta Pixel (só com ID) ---- */
